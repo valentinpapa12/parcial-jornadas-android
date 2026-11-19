@@ -67,3 +67,9 @@ Resultado:
 | Punto de lectura | Día 2 + Datos; abrir "Cachés para viajeros"; volver; rotar | 2 resultados de Datos. |
 | Proceso muerto | con la ficha abierta: Inicio; `adb shell am kill ar.jornadas`; volver desde Recientes | Se recupera la ficha; al volver, Día 2 + Datos. |
 | Contador | abrir la app (1); rotar, entrar a una ficha, cambiar de pestaña (+0); Actualizar dos veces seguidas (+1) | Mesa: 2 peticiones. |
+
+## Compilación
+
+**Problema.** El proyecto no compilaba: `ServicioLocal` usa `toMediaType()` y `toResponseBody()`, que son extensiones de OkHttp 4, pero Retrofit 2.11 trae OkHttp 3.14 como dependencia transitiva.
+
+**Cambio.** Se agregó `com.squareup.okhttp3:okhttp:4.12.0` en `app/build.gradle.kts`. `./gradlew assembleDebug` termina bien.
