@@ -16,7 +16,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun Portada(model: ProgramaModel) {
     var seccion by rememberSaveable { mutableStateOf("Programa") }
     var detalle by rememberSaveable { mutableStateOf<String?>(null) }
-    val charlas by model.charlas.collectAsStateWithLifecycle()
+    val cartelera by model.cartelera.collectAsStateWithLifecycle()
+    val charlas = cartelera?.charlas.orEmpty()
     BackHandler(detalle != null || seccion != "Programa") {
         if (detalle != null) detalle = null else seccion = "Programa"
     }
@@ -36,6 +37,8 @@ fun Portada(model: ProgramaModel) {
                 if (detalle != null) {
                     TextButton(onClick = { detalle = null }) { Text("Volver") }
                     val ficha = charlas.find { it.id == detalle }
+                    // Si la charla se retiró en una edición nueva, se avisa en vez de quedar en blanco.
+                    if (ficha == null && cartelera != null) Text("Esta charla ya no forma parte del programa.")
                     if (ficha != null) Column(Modifier.verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Text(ficha.titulo, style = MaterialTheme.typography.headlineMedium)
